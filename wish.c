@@ -22,6 +22,11 @@ int main(int argc, char **argv){
             exit(0);
         }
 
+        if(strcmp(command, "exit\n") == 0){
+            printf("Goodbye!\n");
+            exit(0);
+        }
+
         if(strcmp(command, "ls\n") == 0){
             //fork and exec in child process
             pid_t pid = fork();

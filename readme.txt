@@ -13,4 +13,6 @@ ls:
 
     It would be good to get down some functionality here to break up the lines I'm grabbing into strings separated by whitespace.
     So if it's ls -a then I can get "ls" and "-a". Basically literally argc and argv for my shell. The project intro recommended checking out strsep()
-    
+
+    Ok I got a basic version of ls working. I just check if the command entered is exactly ls and then I fork and execvp from the child.
+    Now I want to get the arguments and pass those. So I need to build a variable array of char *'s. 
