@@ -1,0 +1,2 @@
+Ok so first to just get some basic stuff going I want to get it printing the prompt and then just echo any user input until EOF and then exit.
+So I'll do a while loop on getline() and printf() then repeat. If getline() sees EOF it returns -1.
