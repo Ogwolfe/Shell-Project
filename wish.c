@@ -30,9 +30,10 @@ int main(int argc, char **argv){
         char *token, *line_copy;
         line_copy = line;
         const char *delim = "\t\n\v\f\r ";    //Whitespace characters
-        for(int j = 0; token = strsep(&line_copy, delim); j++){
-            if(*token != '\0')
-                args[j] = token;
+        for(int j = 0; token = strsep(&line_copy, delim);){
+            if(*token != '\0'){
+                args[j++] = token;  //Increment j here to avoid NULL gaps in the args[] array
+            }
         }
 
 
@@ -41,8 +42,8 @@ int main(int argc, char **argv){
             exit(0);
         }
 
-        //TO-DO: Don't check for just ls. Break line into tokens and check first token for line and the rest for args.
-        if(strcmp(args[0], "ls") == 0){
+        
+        else if(strcmp(args[0], "ls") == 0){
             //fork and exec in child process
             pid_t pid = fork();
             if(pid == 0){
@@ -59,6 +60,25 @@ int main(int argc, char **argv){
             else
                 wait(NULL);
         }
+
+        else if(strcmp(args[0], "clear") == 0){
+            //fork and exec in child process
+            pid_t pid = fork();
+            if(pid == 0){
+                //Child process
+                execvp("clear", args);
+
+                printf("error in child\n");
+                exit(1);
+            }
+
+            else if(pid < 0){
+                printf("fork() error\n");
+            }
+            else
+                wait(NULL);
+        }
+
         else{
             for(int i = 0; args[i]; i++){
                 printf("%s ", args[i]);
