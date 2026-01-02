@@ -15,4 +15,9 @@ ls:
     So if it's ls -a then I can get "ls" and "-a". Basically literally argc and argv for my shell. The project intro recommended checking out strsep()
 
     Ok I got a basic version of ls working. I just check if the command entered is exactly ls and then I fork and execvp from the child.
-    Now I want to get the arguments and pass those. So I need to build a variable array of char *'s. 
+    Now I want to get the arguments and pass those. So I need to build a variable array of char *'s.
+
+Okay so I've been checking for each command manually by comparing the first token with each of the commands I was going to do.
+But I'm thinking now that I can allow the shell to execute almost any command by only checking for built in commands and if it's
+not one of those then I just exec() whatever it might be. exec() will handle all that and print errors to if the command doesn't exist.
+Then I only need to check for a smaller subset of built ins and not branch for all commands.
