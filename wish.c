@@ -16,13 +16,28 @@ int main(int argc, char **argv){
     char *command = NULL;
     size_t size = 0;
     ssize_t nread;
+    FILE *input = stdin;
+    int batch_mode = 0; //Boolean
+    
+    //Batch mode
+    if(argc == 2){
+        batch_mode = 1;
+        input = fopen(argv[1], "r");
+
+        if(input == NULL){
+            fprintf(stderr, "File not found\n");
+            exit(1);
+        }
+    }
 
     while(1){
         char *args[MAX_ARGS] = {NULL};
-        printf("%s", prompt);
-        nread = getline(&line, &size, stdin);
+        if(!batch_mode){
+            printf("%s", prompt);
+            fflush(stdout);
+        }
+        nread = getline(&line, &size, input);
         if(nread == -1){
-            printf("\n");
             exit(0);
         }
 
@@ -46,7 +61,8 @@ int main(int argc, char **argv){
         }
 
         else if(strcmp(args[0], "cd") == 0){
-            const char *path = args[1];
+            const char *path = (args[1] == NULL || strcmp(args[1], "~") == 0) ? getenv("HOME") : args[1];
+
             int status = chdir(path);
 
             if(status == -1) printf("cd error\n");

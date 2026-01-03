@@ -1,0 +1,6 @@
+ls
+ls -l
+pwd
+echo Hello World!
+exit
+pwd
