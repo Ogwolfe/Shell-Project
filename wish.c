@@ -11,6 +11,8 @@
 
 int main(int argc, char **argv){
 
+    const char *path[50] = {"/bin", NULL};
+
     char *prompt = "wish> ";
     char *line = NULL;
     char *command = NULL;
@@ -44,7 +46,7 @@ int main(int argc, char **argv){
         //Break up line
         char *token, *line_copy;
         line_copy = line;
-        const char *delim = "\t\n\v\f\r& ";    //Whitespace characters + '&' for special shell stuff
+        const char *delim = "\t\n\v\f\r ";    //Whitespace characters + '&' for special shell stuff
         for(int j = 0; token = strsep(&line_copy, delim);){
             if(*token != '\0'){
                 args[j++] = token;  //Increment j here to avoid NULL gaps in the args[] array
@@ -74,9 +76,30 @@ int main(int argc, char **argv){
             pid_t pid = fork();
             if(pid == 0){
                 //Child process
-                execvp(args[0], args);
 
-                printf("error in child\n");
+
+                //Loop through path array
+                //Check each path with access() first to see if it exist,
+                //Then to see if it can be executed.
+                for(int i = 0; path[i] != NULL; i++){
+                    char *slash = "/";
+                    char *temp = NULL;
+
+                    char *tpath = malloc(strlen(path[i]) + strlen(args[0]) + 2);
+                    if(!tpath) exit(1);
+
+                    temp = stpcpy(tpath, path[i]);  //tpath = "/bin"
+                    temp = stpcpy(temp, slash); //tpath = "/bin/"
+                    temp = stpcpy(temp, args[0]);
+
+
+                    if((access(tpath, F_OK) == 0) && (access(tpath, X_OK) == 0)){
+                        execv(tpath, args);
+                        printf("error in child\n");
+                        exit(1);
+                    }
+                }
+                printf("command not found\n");
                 exit(1);
             }
 
@@ -88,5 +111,5 @@ int main(int argc, char **argv){
         }
     }
 
-    return 0;
+    exit(0);
 }

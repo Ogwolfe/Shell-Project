@@ -21,3 +21,9 @@ Okay so I've been checking for each command manually by comparing the first toke
 But I'm thinking now that I can allow the shell to execute almost any command by only checking for built in commands and if it's
 not one of those then I just exec() whatever it might be. exec() will handle all that and print errors to if the command doesn't exist.
 Then I only need to check for a smaller subset of built ins and not branch for all commands.
+
+Ok I want to work on the path command. So I'm going to keep a fixed length array of like 50 char *'s and use that to store the strings for paths.
+I'll init the shell on start with just /bin. Then I'll add a built in command for "path" that assigns new path variables to the path.
+I can check that the hard cap isn't hit and just set a new string equal to the input and set that into the array.
+
+I'll loop through the strings in the path array and pass them to access() and check for execute permissions with the X_OK flag.
