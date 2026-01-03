@@ -8,8 +8,14 @@
 #include <sys/wait.h>
 
 #define MAX_ARGS 64
+const char *error_message = "An error has occurred\n";
 
 int main(int argc, char **argv){
+
+    if(argc > 2){
+        write(STDERR_FILENO, error_message, strlen(error_message)); 
+        exit(1);
+    }
 
     char *path[50] = {"/bin", NULL};
 
@@ -21,13 +27,14 @@ int main(int argc, char **argv){
     FILE *input = stdin;
     int batch_mode = 0; //Boolean
     
+
     //Batch mode
     if(argc == 2){
         batch_mode = 1;
         input = fopen(argv[1], "r");
 
         if(input == NULL){
-            fprintf(stderr, "File not found\n");
+            write(STDERR_FILENO, error_message, strlen(error_message)); 
             exit(1);
         }
     }
@@ -59,11 +66,15 @@ int main(int argc, char **argv){
         //Check for built in commands first
         if(strcmp(args[0], "exit") == 0){
 
+            if(args[1]){
+                write(STDERR_FILENO, error_message, strlen(error_message)); 
+                continue;
+            }
             for(int i = 1; path[i] != NULL; i++){
                 free(path[i]);
             }
             
-            printf("Goodbye!\n");
+            //printf("Goodbye!\n");
             exit(0);
         }
 
@@ -72,7 +83,7 @@ int main(int argc, char **argv){
 
             int status = chdir(path);
 
-            if(status == -1) printf("cd error\n");
+            if(status == -1) write(STDERR_FILENO, error_message, strlen(error_message));
         }
 
         else if(strcmp(args[0], "path") == 0){

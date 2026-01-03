@@ -27,3 +27,7 @@ I'll init the shell on start with just /bin. Then I'll add a built in command fo
 I can check that the hard cap isn't hit and just set a new string equal to the input and set that into the array.
 
 I'll loop through the strings in the path array and pass them to access() and check for execute permissions with the X_OK flag.
+
+Now for the redirection functionality. I think it should be easy. I can think of it as at the moment the output for the shell is just stdout.
+But I can change that to whatever FILE* I want. I just need to detect the '>'. So I'll parse the arg's array and look for the '>' and
+while I'm at it I know I'll also need to look for the '&' for the parallel commands. 
