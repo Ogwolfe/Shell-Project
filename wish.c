@@ -11,7 +11,7 @@
 
 int main(int argc, char **argv){
 
-    const char *path[50] = {"/bin", NULL};
+    char *path[50] = {"/bin", NULL};
 
     char *prompt = "wish> ";
     char *line = NULL;
@@ -58,6 +58,11 @@ int main(int argc, char **argv){
 
         //Check for built in commands first
         if(strcmp(args[0], "exit") == 0){
+
+            for(int i = 1; path[i] != NULL; i++){
+                free(path[i]);
+            }
+            
             printf("Goodbye!\n");
             exit(0);
         }
@@ -68,6 +73,21 @@ int main(int argc, char **argv){
             int status = chdir(path);
 
             if(status == -1) printf("cd error\n");
+        }
+
+        else if(strcmp(args[0], "path") == 0){
+            int pindex = 1;
+            while(pindex < 50 && path[pindex]){
+                pindex++;
+            }
+            if(pindex == 50){
+                printf("path storage limit reached\n");
+            }
+            else{
+                for(int i = 1; args[i] != NULL && pindex < 50; i++, pindex++){
+                    path[pindex] = strdup(args[i]);
+                }
+            }
         }
 
         //All other commmands
