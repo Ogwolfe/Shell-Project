@@ -30,7 +30,7 @@ int main(int argc, char **argv){
 
     //Batch mode
     if(argc == 2){
-        batch_mode = 1;
+        batch_mode = 1; //batch_mode = true
         input = fopen(argv[1], "r");
 
         if(input == NULL){
