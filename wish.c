@@ -123,6 +123,13 @@ int main(int argc, char **argv){
                     temp = stpcpy(temp, slash); //tpath = "/bin/"
                     temp = stpcpy(temp, args[0]);
 
+                    for(int i = 1; args[i]; i++){
+                        if(args[i] == ">"){
+                            int fd = open(args[i+1], O_WRONLY | O_CREAT, 0644);
+                            dup2(fd, STDOUT_FILENO);
+                            break;
+                        }
+                    }
 
                     if((access(tpath, F_OK) == 0) && (access(tpath, X_OK) == 0)){
                         execv(tpath, args);
