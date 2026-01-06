@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/wait.h>
+#include <fcntl.h>
 
 #define MAX_ARGS 64
 const char *error_message = "An error has occurred\n";
