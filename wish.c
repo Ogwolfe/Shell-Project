@@ -125,7 +125,7 @@ int main(int argc, char **argv){
                     temp = stpcpy(temp, args[0]);
 
                     for(int i = 1; args[i]; i++){
-                        if(args[i] == ">"){
+                        if(strcmp(args[i], ">") == 0){
                             int fd = open(args[i+1], O_WRONLY | O_CREAT, 0644);
                             dup2(fd, STDOUT_FILENO);
                             break;
